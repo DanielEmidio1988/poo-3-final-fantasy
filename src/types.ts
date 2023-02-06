@@ -5,3 +5,10 @@ export interface PersonDB {
     level: number,
     create_at: string
 }
+
+export interface EquipamentDB{
+    id: string,
+    name: string,
+    type: string,
+    person_id: string,
+}
