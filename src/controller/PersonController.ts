@@ -2,23 +2,16 @@ import { Request, Response } from 'express'
 import { PersonDatabase } from '../database/PersonDatabase'
 import { PersonDB } from '../types'
 import { Person } from '../models/Person'
+import { PersonBusiness } from '../business/PersonBusiness'
 
 export class PersonController {
     public getAllPersons = async(req: Request, res: Response)=>{
         try {
-            const personDatabase = new PersonDatabase()
-            const personsDB = await personDatabase.findPersons()
 
-            const persons:Person[] = personsDB.map((personDB) => new Person(
-                personDB.id,
-                personDB.name,
-                personDB.classperson,
-                personDB.level,
-                personDB.create_at,
+            const personBusiness = new PersonBusiness()
+            const output = await personBusiness.getAllPersons()
 
-            ))
-
-            res.status(200).send(persons)
+            res.status(200).send(output)
 
         } catch (error) {
             console.log(error)
@@ -39,26 +32,16 @@ export class PersonController {
     public newPerson = async(req:Request,res:Response)=>{
         try {
             const {id,name,classperson, level} = req.body
-
-            const personDatabase = new PersonDatabase()
-            
-            const newPerson = new Person(
+            const person ={
                 id,
                 name,
                 classperson,
                 level,
-                new Date().toISOString()
-            ) 
-
-            const newPersonDB:PersonDB ={
-                id: newPerson.getId(),
-                name: newPerson.getName(),
-                classperson: newPerson.getClassperson(),
-                level: newPerson.getLevel(),
-                create_at: newPerson.getCreateAt(),
             }
 
-            await personDatabase.insertPerson(newPersonDB)
+            const personBusiness = new PersonBusiness()
+            await personBusiness.newPerson(person)
+
             res.status(200).send("Personagem inserido com sucesso!")
 
         } catch (error) {

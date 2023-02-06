@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { PersonController } from './controller/PersonController'
+import { EquipamentController } from './controller/EquipamentController'
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.listen(3003, ()=>{
 })
 
 const personController = new PersonController()
+const equipamentController = new EquipamentController()
 
 app.get("/start", async (req: Request, res: Response)=>{
     try {
@@ -32,6 +34,8 @@ app.get("/start", async (req: Request, res: Response)=>{
 })
 
 app.get("/persons", personController.getAllPersons)
+
+app.get("/equipaments", equipamentController.getAllEquipaments)
 
 app.post("/persons", personController.newPerson)
 
